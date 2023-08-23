@@ -10,7 +10,7 @@ module.exports = {
     filename: 'bundle.js',
   },
   performance: {
-		maxAssetSize: 1000000,
+    maxAssetSize: 1000000,
     maxEntrypointSize: 1000000,
 	},
   module: {
@@ -24,14 +24,14 @@ module.exports = {
         type: 'asset/resource',
         use: [
           'file-loader',
-					{
-						loader: 'image-webpack-loader',
-						options: {
-							bypassOnDebug: true,
-							disable: true,
-						},
-					},
-				],
+	  {
+	    loader: 'image-webpack-loader',
+	    options: {
+	      bypassOnDebug: true,
+	      disable: true,
+	    },
+	  },
+	],
       },
     ]
   }
