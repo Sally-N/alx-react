@@ -11,8 +11,7 @@ module.exports = {
   },
   performance: {
     maxAssetSize: 1000000,
-    maxEntrypointSize: 1000000,
-	},
+  },
   module: {
     rules: [
       {
@@ -20,8 +19,7 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-        type: 'asset/resource',
+        test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
           'file-loader',
 	  {
@@ -33,6 +31,6 @@ module.exports = {
 	  },
 	],
       },
-    ]
-  }
+    ],
+  },
 };
