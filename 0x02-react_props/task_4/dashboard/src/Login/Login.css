@@ -1,17 +1,12 @@
-.App-body {
-	font-size: var(--gen-font-size);
-	padding: var(--padding);
-	border-bottom: var(--border-bottom);
-	height: 45%;
+.login {
+    padding: 16px 24px;
 }
 
-.form-inputs {
-	display: flex;
-	gap: 2em;
-	align-items: center;
+.login input,
+.login button {
+    margin: 4px;
 }
 
-.form-inputs .input input {
-	height: var(--gen-font-size);
-	margin-left: 10px;
+.login button {
+    cursor: pointer;
 }
