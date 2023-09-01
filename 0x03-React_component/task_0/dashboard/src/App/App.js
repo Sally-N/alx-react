@@ -30,7 +30,7 @@ class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Notifications listNotifications={this.state.listNotifications}/>
+        <Notifications listNotifications={this.state.listNotifications} />
         <div className="App">
           <Header />
           {this.props.isLoggedIn ? <CourseList listCourses={this.state.listCourses}/> : <Login />}
