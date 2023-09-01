@@ -7,7 +7,8 @@ import Login from '../Login/Login';
 import CourseList from '../CourseList/CourseList';
 import PropTypes from 'prop-types';
 import { getLatestNotification } from '../utils/utils';
-
+import BodySection from '../BodySection/BodySection';
+import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 
 class App extends React.Component {
   constructor(props) {
@@ -25,7 +26,9 @@ class App extends React.Component {
         {id: 3, type: 'urgent', html: getLatestNotification()}
       ]
     };
-
+    
+    this.isLoggedIn = props.isLoggedIn;
+    this.logOut = props.logOut;
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }	  
   
@@ -50,7 +53,13 @@ class App extends React.Component {
         <Notifications listNotifications={this.state.listNotifications} />
         <div className="App">
           <Header />
-          {this.props.isLoggedIn ? <CourseList listCourses={this.state.listCourses}/> : <Login />}
+          {this.props.isLoggedIn 
+	    ? <BodySectionWithMarginBottom title="Course list"><CourseList listCourses={this.state.listCourses} /></BodySectionWithMarginBottom> 
+	    : <BodySectionWithMarginBottom title="Log in to continue"><Login /></BodySectionWithMarginBottom>
+	  }
+	  <BodySection title="News from the School">
+	    <p>Hello School!</p>
+	  </BodySection>  
           <Footer />
         </div>
       </React.Fragment>
