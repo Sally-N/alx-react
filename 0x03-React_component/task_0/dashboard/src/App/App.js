@@ -8,8 +8,8 @@ import CourseList from '../CourseList/CourseList';
 import PropTypes from 'prop-types';
 import { getLatestNotification } from '../utils/utils';
 
-Class App extends React.Component {
-  state = {
+class App extends React.Component {
+  state : {
     listCourses = [
       {id: 1, name: 'ES6', credit: 60},
       {id: 2, name: 'Webpack', credit: 20},
@@ -41,7 +41,7 @@ App.defaultProps = {
 };
 
 App.propTypes = {
-  isLoggedIn: PropTypes.bool
+  isLoggedIn: PropTypes.bool,
 };
 
 export default App;
