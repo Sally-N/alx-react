@@ -23,7 +23,7 @@ class Notifications extends React.Component {
   render() {
     return (
       <div className={css(styles.Wrapper)}>
-        <div className={css(styles.menuItem)}>
+        <div className={css(styles.menuItem)} onClick={this.props.handleDisplayDrawer}>
           Your notifications
         </div>
         {this.props.displayDrawer? 
@@ -32,6 +32,7 @@ class Notifications extends React.Component {
               aria-label="Close"
               onClick={(e) => {
                 console.log('Close button has been clicked');
+		this.props.handleHideDrawer();
               }}
               >
                 <img src={closeIcon} alt="close icon" width="15px" />
@@ -103,20 +104,20 @@ const translateY = {
 
 const styles = StyleSheet.create({
   menuItem: {
-		fontFamily: 'Arial, Helvetica, sans-serif',
-		textAlign: 'right',
-		fontWeight: 'bold',
-		padding: '5px',
+    fontFamily: 'Arial, Helvetica, sans-serif',
+    textAlign: 'right',
+    fontWeight: 'bold',
+    padding: '5px',
     [smallScreen.small]: {
       display: 'none'
     },
     ":hover": {
-			cursor: 'pointer',
-			animationName: [opacity, translateY],
-			animationDuration: '1s, 0.5s',
-			animationIterationCount: 3
-		}
-	},
+      cursor: 'pointer',
+      animationName: [opacity, translateY],
+      animationDuration: '1s, 0.5s',
+      animationIterationCount: 3
+    }
+  },
   notiHeader: {
     width: '100%'
   },
@@ -161,12 +162,16 @@ const styles = StyleSheet.create({
 
 Notifications.defaultProps = {
   displayDrawer: false,
-  listNotifications: []
+  listNotifications: [],
+  handleDisplayDrawer: () => {},
+  handleHideDrawer: () => {},
 };
 
 Notifications.propTypes = {
   displayDrawer: PropeTypes.bool,
-  listNotifications: PropeTypes.arrayOf(NotificationItemShape)
+  listNotifications: PropeTypes.arrayOf(NotificationItemShape),
+  handleDisplayDrawer: PropTypes.func,
+  handleHideDrawer: PropTypes.func,
 };
 
 export default Notifications;
