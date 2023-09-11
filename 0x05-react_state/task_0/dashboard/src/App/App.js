@@ -37,6 +37,8 @@ class App extends React.Component {
 		this.state = { displayDrawer: false };
 
 		this.handleKeyPress = this.handleKeyPress.bind(this);
+		this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
+		this.handleHideDrawer = this.handleHideDrawer.bind(this);
 
 	}
 
@@ -81,7 +83,9 @@ class App extends React.Component {
 				<div className={css(styles.App)}>
 					<div className={css(styles['heading-section'])}>
 						<Notifications 
-							listNotifications={this.listNotifications} displayDrawer={this.state.displayDrawer} handleDisplayDrawer={this.handleDisplayDrawer} handleHideDrawer={this.handleHideDrawer} />
+							listNotifications={this.listNotifications}
+							displayDrawer={this.state.displayDrawer} 
+							handleDisplayDrawer={this.handleDisplayDrawer} handleHideDrawer={this.handleHideDrawer} />
 						<Header />
 					</div>
 					{this.props.isLoggedIn ? (

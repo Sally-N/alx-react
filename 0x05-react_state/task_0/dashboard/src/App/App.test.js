@@ -11,39 +11,45 @@
  import { shallow, mount } from 'enzyme';
  import { StyleSheetTestUtils } from 'aphrodite';
  
- beforeEach(() => {
-	 StyleSheetTestUtils.suppressStyleInjection();
- });
- afterEach(() => {
-	 StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
- });
- 
  describe('App tests', () => {
+	 beforeEach(() => {
+		 StyleSheetTestUtils.suppressStyleInjection();
+	 });
+
+	 afterEach(() => {
+		 StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+	 });
+
 	 it('renders without crashing', () => {
 		 const component = shallow(<App />);
  
 		 expect(component).toBeDefined();
 	 });
+
 	 it('should render Notifications component', () => {
 		 const component = shallow(<App />);
  
 		 expect(component.containsMatchingElement(<Notifications />)).toEqual(false);
 	 });
+
 	 it('should render Header component', () => {
 		 const component = shallow(<App />);
  
 		 expect(component.contains(<Header />)).toBe(true);
 	 });
+
 	 it('should render Login Component', () => {
 		 const component = shallow(<App />);
  
 		 expect(component.contains(<Login />)).toBe(true);
 	 });
+
 	 it('should render Footer component', () => {
 		 const component = shallow(<App />);
  
 		 expect(component.contains(<Footer />)).toBe(false);
 	 });
+
 	 it('does not render courselist if logged out', () => {
 		 const component = shallow(<App />);
  
@@ -51,16 +57,15 @@
  
 		 expect(component.contains(<CourseList />)).toBe(false);
 	 });
+
 	 it('renders courselist if logged in', () => {
 		 const component = shallow(<App isLoggedIn={true} />);
  
 		 expect(component.containsMatchingElement(<CourseList />)).toEqual(false);
 		 expect(component.contains(<Login />)).toBe(false);
 	 });
- });
  
- describe('When ctrl + h is pressed', () => {
-	 it('calls logOut function', () => {
+	 it('When ctrl + h is pressed the logOut function is called', () => {
 		 const mocked = jest.fn();
 		 const wrapper = mount(<App logOut={mocked} />);
 		 const event = new KeyboardEvent('keydown', { ctrlKey: true, key: 'h' });
@@ -70,7 +75,6 @@
 		 wrapper.unmount();
 	 });
  
-	 window.alert = jest.fn();
 	 it('checks that alert function is called', () => {
 		 const wrapper = mount(<App />);
 		 const spy = jest.spyOn(window, 'alert');
@@ -92,5 +96,33 @@
 		 jest.restoreAllMocks();
 		 wrapper.unmount();
 	 });
-	 window.alert.mockClear();
- });
+
+	 it('checks the default state for displayDrawer is false', () => {
+		 const wrapper = shallow(<App />);
+		 expect(wrapper.state().displayDrawer).toEqual(false);
+	 });
+
+	 it('checks that after calling handleDisplayDrawer, the state changes to true', () => {
+		 const wrapper = shallow(<App />);
+		 expect(wrapper.state().displayDrawer).toEqual(false);
+
+		 wrapper.instance().handleDisplayDrawer();
+
+		 expect(wrapper.state().displayDrawer).toEqual(true);		
+	});
+	
+	it('checks that after calling handleHideDrawer, the state is updated to be false', () => {
+		 const wrapper = shallow(<App />);
+		 expect(wrapper.state().displayDrawer.toEqual(false);
+
+		 wrapper.instance().handleDisplayDrawer();
+
+		 expect(wrapper.state().displayDrawer).toEqual(true);
+
+		 wrapper.instance().handleHideDrawer();
+
+		 expect(wrapper.state().displayDrawer.toEqual(false);
+
+		
+}):
+		
