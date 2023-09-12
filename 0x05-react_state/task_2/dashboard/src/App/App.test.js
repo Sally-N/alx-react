@@ -65,64 +65,109 @@ describe('App tests', () => {
 		expect(component.contains(<Login />)).toBe(false);
 	});
 
-	it('When ctrl + h is pressed the logOut function is called', () => {
-		const mocked = jest.fn();
-		const wrapper = mount(<App logOut={mocked} />);
-		const event = new KeyboardEvent('keydown', { ctrlKey: true, key: 'h' });
-		document.dispatchEvent(event);
-
-		expect(mocked).toHaveBeenCalledTimes(1);
-		wrapper.unmount();
-	});
-
-	it('checks that alert function is called', () => {
-		const wrapper = mount(<App />);
-		const spy = jest.spyOn(window, 'alert');
-		const event = new KeyboardEvent('keydown', { ctrlKey: true, key: 'h' });
-		document.dispatchEvent(event);
-
-		expect(spy).toHaveBeenCalled();
-		spy.mockRestore();
-		wrapper.unmount();
-	});
-
-	it('checks that the alert is "Logging you out"', () => {
-		const wrapper = mount(<App />);
-		const spy = jest.spyOn(window, 'alert');
-		const event = new KeyboardEvent('keydown', { ctrlKey: true, key: 'h' });
-		document.dispatchEvent(event);
-
-		expect(spy).toHaveBeenCalledWith('Logging you out');
-		jest.restoreAllMocks();
-		wrapper.unmount();
-	});
-
-	it('checks the default state for displayDrawer is false', () => {
-		const wrapper = shallow(<App />);
-		expect(wrapper.state().displayDrawer).toEqual(false);
-	});
-
-	it('checks that after calling handleDisplayDrawer, the state changes to true', () => {
-		const wrapper = shallow(<App />);
-		expect(wrapper.state().displayDrawer).toEqual(false);
-
-		wrapper.instance().handleDisplayDrawer();
-
-		expect(wrapper.state().displayDrawer).toEqual(true);
-	});
-
-	it('checks that after calling handleHideDrawer, the state is updated to be false', () => {
-		const wrapper = shallow(<App />);
-		expect(wrapper.state().displayDrawer).toEqual(false);
-
-		wrapper.instance().handleDisplayDrawer();
-
-		expect(wrapper.state().displayDrawer).toEqual(true);
-
-		wrapper.instance().handleHideDrawer();
-
-		expect(wrapper.state().displayDrawer).toEqual(false);
-
-	});
+	
 });
+
+describe("Testing <App isLoggedIn={true} />", () => {
+	let wrapper;
+  
+	beforeEach(() => {
+	  StyleSheetTestUtils.suppressStyleInjection();
+	  wrapper = shallow(<App/>);
+	});
+  
+	it("the Login component is  included", () => {
+	  expect(wrapper.find('Login')).toHaveLength(1);
+	});
+  
+	it("the CourseList component is included", () => {
+	  expect(wrapper.find('CourseList').exists());
+	});
+  });
+  
+  describe("Testing <App logOut={function} />", () => {
+	beforeEach(() => {
+	  StyleSheetTestUtils.suppressStyleInjection();
+	});
+  
+	it("verify that when the keys control and h are pressed the logOut function, passed as a prop, is called and the alert function is called with the string Logging you out", () => {
+	  const wrapper = mount(<App logOut={()=>{console.log("ctrl and h are pressed")}}/>);
+	  window.alert = jest.fn();
+	  const inst = wrapper.instance();
+	  const logout = jest.spyOn(inst, 'logOut');
+	  const alert = jest.spyOn(window, 'alert');
+	  const event = new KeyboardEvent('keydown', {bubbles:true, ctrlKey: true, key: 'h'});
+	  document.dispatchEvent(event);
+	  expect(alert).toBeCalledWith("Logging you out");
+	  expect(logout).toBeCalled();
+	  alert.mockRestore();
+	});
+  });
+  
+  describe("Testing App Component's State />", () => {
+	let wrapper;
+  
+	beforeEach(() => {
+	  StyleSheetTestUtils.suppressStyleInjection();
+	  wrapper = shallow(<App/>);
+	});
+  
+	afterEach(() => {
+		  jest.clearAllMocks();
+	  });
+  
+	it('check if default value of displayDrawer in state is false', () => {
+	  expect(wrapper.state('displayDrawer')).toBe(false);
+	});
+  
+	it('Verify that after calling handleDisplayDrawer, the state displayDrawer should now be true', () => {
+	  wrapper.instance().handleDisplayDrawer();
+	  expect(wrapper.state('displayDrawer')).toBe(true);
+	});
+  
+	it('verify that after calling handleHideDrawer, the state displayDrawer is updated to be false', () => {
+	  wrapper.instance().handleHideDrawer();
+	  expect(wrapper.state('displayDrawer')).toBe(false);
+	});
+  
+	it(`Tests that the logIn function updates user's state correctly`, () => {
+		  wrapper = mount(
+			  <AppContext.Provider value={{ user, logOut }}>
+				  <App />
+			  </AppContext.Provider>
+		  );
+  
+		  const myUser = {
+			  email: 'testy@gmail.com',
+			  password: 'testy',
+			  isLoggedIn: true,
+		  }
+  
+		  expect(wrapper.state().user).toEqual(user);
+		  const instance = wrapper.instance();
+		  instance.logIn(myUser.email, myUser.password);
+		  expect(wrapper.state().user).toEqual(myUser);
+		  wrapper.unmount();
+	  })
+  
+	  it(`Tests that the logOut function updates user's state correctly`, () => {
+		  wrapper = mount(
+			  <AppContext.Provider value={{ user, logOut }}>
+				  <App />
+			  </AppContext.Provider>
+		  );
+  
+		  const myUser = {
+			  email: 'testy@gmail.com',
+			  password: 'testy',
+			  isLoggedIn: true,
+		  }
+  
+		  expect(wrapper.state().user).toEqual(user);
+		  const instance = wrapper.instance();
+		  instance.logOut();
+		  expect(wrapper.state().user).toEqual(user);
+		  wrapper.unmount();
+	  })
+  });
 

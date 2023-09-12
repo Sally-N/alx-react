@@ -31,15 +31,14 @@ const styles = StyleSheet.create({
     }
 });
 
-function Login() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+function Login(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [enableSubmit, setEnableSubmit] = useState(false);
 
     const handleLoginSubmit = (e) => {
         e.preventDefault();
-        setIsLoggedIn(true);
+        props.logIn(e.target.elements.email.value, e.target.elements.password.value);
     }
 
     const handleChangeEmail = (e) => {
@@ -52,13 +51,13 @@ function Login() {
 
     useEffect(() => {
         if (email !== "" && password !== "") {
-          setEnableSubmit(true);
+            setEnableSubmit(true);
         } else {
-          if (enableSubmit !== false) {
-            setEnableSubmit(false);
-          }
+            if (enableSubmit !== false) {
+                setEnableSubmit(false);
+            }
         }
-      }, [email, password]);
+    }, [email, password]);
 
     return (
         <div className={css(styles.AppBody)}>
@@ -78,10 +77,14 @@ function Login() {
                     </label>
                     <input type="password" name="password" className={css(styles.AppBodyInput)} value={password} onChange={handleChangePassword} />
                 </div>
-                <input type='submit' value="Ok" disabled={!enableSubmit}  />
+                <input type='submit' value="Ok" disabled={!enableSubmit} />
             </form>
         </div>
     );
 }
+
+Login.propTypes = {
+    logIn: PropTypes.func
+  };
 
 export default Login;

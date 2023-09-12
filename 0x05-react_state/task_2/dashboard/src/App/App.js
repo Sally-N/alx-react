@@ -120,7 +120,7 @@ class App extends React.Component {
 							</BodySectionWithMarginBottom>
 						) : (
 							<BodySectionWithMarginBottom title='Log in to continue'>
-								<Login login={this.logIn} />
+								<Login login={this.logIn(user.email, user.password)} />
 							</BodySectionWithMarginBottom>
 						)}
 						<BodySection title='News from the school'>
