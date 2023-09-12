@@ -9,6 +9,7 @@ import Notifications from '../Notifications/Notifications';
 import { getLatestNotification } from '../utils/utils';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import { StyleSheet, css } from 'aphrodite';
+import { logOut, user } from './AppContext';
 
 const styles = StyleSheet.create({
 	App: {
@@ -34,7 +35,12 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { displayDrawer: false };
+		this.state = {
+			displayDrawer: false,
+			user: user,
+			logOut: logOut,
+		};
+	
 
 		this.handleKeyPress = this.handleKeyPress.bind(this);
 		this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
@@ -114,7 +120,7 @@ class App extends React.Component {
 
 App.defaultProps = {
 	isLoggedIn: false,
-	logOut: () => {	},
+	logOut: () => { },
 };
 
 App.propTypes = {
