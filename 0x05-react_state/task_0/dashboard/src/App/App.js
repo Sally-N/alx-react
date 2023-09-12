@@ -82,9 +82,9 @@ class App extends React.Component {
 			<React.Fragment>
 				<div className={css(styles.App)}>
 					<div className={css(styles['heading-section'])}>
-						<Notifications 
+						<Notifications
 							listNotifications={this.listNotifications}
-							displayDrawer={this.state.displayDrawer} 
+							displayDrawer={this.state.displayDrawer}
 							handleDisplayDrawer={this.handleDisplayDrawer} handleHideDrawer={this.handleHideDrawer} />
 						<Header />
 					</div>

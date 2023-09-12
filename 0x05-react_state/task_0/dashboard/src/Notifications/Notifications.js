@@ -1,7 +1,7 @@
 import React from 'react';
 import closeIcon from '../assets/close-icon.png';
 import NotificationItem from './NotificationItem';
-import PropeTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import NotificationItemShape from './NotificationItemShape';
 import { StyleSheet, css } from 'aphrodite/no-important';
 
@@ -17,7 +17,8 @@ class Notifications extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.listNotifications.length > this.props.listNotifications.length;
+    return nextProps.listNotifications.length > this.props.listNotifications.length ||
+      this.props.displayDrawer != nextProps.displayDrawer;
   }
 
   render() {
@@ -26,45 +27,46 @@ class Notifications extends React.Component {
         <div className={css(styles.menuItem)} onClick={this.props.handleDisplayDrawer}>
           Your notifications
         </div>
-        {this.props.displayDrawer? 
-            <div className={css(styles.Notifications)}>
-              <button className={css(styles.NotificationsBtn)}
+        {this.props.displayDrawer ?
+          <div className={css(styles.Notifications)}>
+            <button className={css(styles.NotificationsBtn)}
               aria-label="Close"
               onClick={(e) => {
                 console.log('Close button has been clicked');
-		this.props.handleHideDrawer();
+                this.props.handleHideDrawer();
               }}
-              >
-                <img src={closeIcon} alt="close icon" width="15px" />
-              </button>
-              {
-                this.props.listNotifications.length != 0 ?
-                  <p className={css(styles.notiHeader)}>Here is the list of notifications</p>
+            >
+              <img src={closeIcon} alt="close icon" width="15px" />
+            </button>
+            {
+              this.props.listNotifications.length != 0 ?
+                <p className={css(styles.notiHeader)}>Here is the list of notifications</p>
                 : null
-              }
-              <ul>
-                {
-                  this.props.listNotifications.length == 0 ?
-                    <NotificationItem type="default" value="No new notification for now" />
+            }
+            <ul>
+              {
+                this.props.listNotifications.length == 0 ?
+                  <NotificationItem type="default" value="No new notification for now" />
                   : null
-                }
-                {
-                  this.props.listNotifications.map((val, idx)=> {
-                    return <NotificationItem
+              }
+              {
+                this.props.listNotifications.map((val, idx) => {
+                  return <NotificationItem
                     type={val.type}
                     value={val.value}
                     html={val.html}
                     key={val.id}
                     markAsRead={this.markAsRead}
+                    id={val.id}
                   />
-                  })
-                }
-              </ul>
-            </div>
+                })
+              }
+            </ul>
+          </div>
           :
-            null
+          null
         }
-        
+
       </div>
     );
   }
@@ -163,13 +165,13 @@ const styles = StyleSheet.create({
 Notifications.defaultProps = {
   displayDrawer: false,
   listNotifications: [],
-  handleDisplayDrawer: () => {},
-  handleHideDrawer: () => {},
+  handleDisplayDrawer: () => { },
+  handleHideDrawer: () => { },
 };
 
 Notifications.propTypes = {
-  displayDrawer: PropeTypes.bool,
-  listNotifications: PropeTypes.arrayOf(NotificationItemShape),
+  displayDrawer: PropTypes.bool,
+  listNotifications: PropTypes.arrayOf(NotificationItemShape),
   handleDisplayDrawer: PropTypes.func,
   handleHideDrawer: PropTypes.func,
 };
