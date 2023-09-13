@@ -38,6 +38,11 @@ class App extends React.Component {
 			displayDrawer: false,
 			user: user,
 			logOut: this.logOut,
+			listNotifications: [
+				{ id: 1, type: 'default', value: 'New course available' },
+				{ id: 2, type: 'urgent', value: 'New resume available' },
+				{ id: 3, type: 'urgent', html: getLatestNotification() },
+			],
 		};
 
 
@@ -46,6 +51,7 @@ class App extends React.Component {
 		this.handleHideDrawer = this.handleHideDrawer.bind(this);
 		this.logIn = this.logIn.bind(this);
 		this.logOut = this.logOut.bind(this);
+		this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
 
 	}
 
@@ -55,11 +61,7 @@ class App extends React.Component {
 		{ id: 3, name: 'React', credit: 40 },
 	];
 
-	listNotifications = [
-		{ id: 1, type: 'default', value: 'New course available' },
-		{ id: 2, type: 'urgent', value: 'New resume available' },
-		{ id: 3, type: 'urgent', html: getLatestNotification() },
-	];
+
 
 	handleKeyPress(e) {
 		if (e.ctrlKey && e.key === 'h') {
@@ -98,6 +100,12 @@ class App extends React.Component {
 		})
 	}
 
+	markNotificationAsRead(id) {
+		let listNot = this.state.listNotifications;
+		let newNotificationList = listNot.filter(notif => notif.id !== id);
+		this.setState({ listNot: newNotificationList });
+	}
+
 	render() {
 		return (
 			<UserContext.Provider value={{
@@ -108,10 +116,12 @@ class App extends React.Component {
 					<div className={css(styles.App)}>
 						<div className={css(styles['heading-section'])}>
 							<Notifications
-								listNotifications={this.listNotifications}
+								listNotifications={this.state.listNotifications}
 								displayDrawer={this.state.displayDrawer}
 								handleDisplayDrawer={this.handleDisplayDrawer}
-								handleHideDrawer={this.handleHideDrawer} />
+								handleHideDrawer={this.handleHideDrawer}
+								markNotificationAsRead={this.markNotificationAsRead}
+							/>
 							<Header />
 						</div>
 						{user.isLoggedIn ? (
