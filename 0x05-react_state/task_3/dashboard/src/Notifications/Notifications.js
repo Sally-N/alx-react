@@ -6,19 +6,9 @@ import NotificationItemShape from './NotificationItemShape';
 import { StyleSheet, css } from 'aphrodite/no-important';
 
 
-class Notifications extends React.Component {
+class Notifications extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.markAsRead = this.markAsRead.bind(this);
-  }
-
-  markAsRead(id) {
-    console.log(`Notification ${id} has been marked as read`);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return nextProps.listNotifications.length > this.props.listNotifications.length ||
-      this.props.displayDrawer != nextProps.displayDrawer;
   }
 
   render() {
@@ -56,7 +46,7 @@ class Notifications extends React.Component {
                     value={val.value}
                     html={val.html}
                     key={val.id}
-                    markAsRead={this.markAsRead}
+                    markAsRead={this.props.markNotificationAsRead}
                     id={val.id}
                   />
                 })
@@ -167,6 +157,7 @@ Notifications.defaultProps = {
   listNotifications: [],
   handleDisplayDrawer: () => { },
   handleHideDrawer: () => { },
+  markNotificationAsRead: () => { }
 };
 
 Notifications.propTypes = {
@@ -174,6 +165,7 @@ Notifications.propTypes = {
   listNotifications: PropTypes.arrayOf(NotificationItemShape),
   handleDisplayDrawer: PropTypes.func,
   handleHideDrawer: PropTypes.func,
+  markNotificationAsRead: PropTypes.func,
 };
 
 export default Notifications;
