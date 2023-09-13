@@ -65,109 +65,144 @@ describe('App tests', () => {
 		expect(component.contains(<Login />)).toBe(false);
 	});
 
-	
+
 });
 
 describe("Testing <App isLoggedIn={true} />", () => {
 	let wrapper;
-  
+
 	beforeEach(() => {
-	  StyleSheetTestUtils.suppressStyleInjection();
-	  wrapper = shallow(<App/>);
+		StyleSheetTestUtils.suppressStyleInjection();
+		wrapper = shallow(<App />);
 	});
-  
+
 	it("the Login component is  included", () => {
-	  expect(wrapper.find('Login')).toHaveLength(1);
+		expect(wrapper.find('Login')).toHaveLength(1);
 	});
-  
+
 	it("the CourseList component is included", () => {
-	  expect(wrapper.find('CourseList').exists());
+		expect(wrapper.find('CourseList').exists());
 	});
-  });
-  
-  describe("Testing <App logOut={function} />", () => {
+});
+
+describe("Testing <App logOut={function} />", () => {
 	beforeEach(() => {
-	  StyleSheetTestUtils.suppressStyleInjection();
+		StyleSheetTestUtils.suppressStyleInjection();
 	});
-  
+
 	it("verify that when the keys control and h are pressed the logOut function, passed as a prop, is called and the alert function is called with the string Logging you out", () => {
-	  const wrapper = mount(<App logOut={()=>{console.log("ctrl and h are pressed")}}/>);
-	  window.alert = jest.fn();
-	  const inst = wrapper.instance();
-	  const logout = jest.spyOn(inst, 'logOut');
-	  const alert = jest.spyOn(window, 'alert');
-	  const event = new KeyboardEvent('keydown', {bubbles:true, ctrlKey: true, key: 'h'});
-	  document.dispatchEvent(event);
-	  expect(alert).toBeCalledWith("Logging you out");
-	  expect(logout).toBeCalled();
-	  alert.mockRestore();
+		const wrapper = mount(<App logOut={() => { console.log("ctrl and h are pressed") }} />);
+		window.alert = jest.fn();
+		const inst = wrapper.instance();
+		const logout = jest.spyOn(inst, 'logOut');
+		const alert = jest.spyOn(window, 'alert');
+		const event = new KeyboardEvent('keydown', { bubbles: true, ctrlKey: true, key: 'h' });
+		document.dispatchEvent(event);
+		expect(alert).toBeCalledWith("Logging you out");
+		expect(logout).toBeCalled();
+		alert.mockRestore();
 	});
-  });
-  
-  describe("Testing App Component's State />", () => {
+});
+
+describe("Testing App Component's State />", () => {
 	let wrapper;
-  
+
 	beforeEach(() => {
-	  StyleSheetTestUtils.suppressStyleInjection();
-	  wrapper = shallow(<App/>);
+		StyleSheetTestUtils.suppressStyleInjection();
+		wrapper = shallow(<App />);
 	});
-  
+
 	afterEach(() => {
-		  jest.clearAllMocks();
-	  });
-  
+		jest.clearAllMocks();
+	});
+
 	it('check if default value of displayDrawer in state is false', () => {
-	  expect(wrapper.state('displayDrawer')).toBe(false);
+		expect(wrapper.state('displayDrawer')).toBe(false);
 	});
-  
+
 	it('Verify that after calling handleDisplayDrawer, the state displayDrawer should now be true', () => {
-	  wrapper.instance().handleDisplayDrawer();
-	  expect(wrapper.state('displayDrawer')).toBe(true);
+		wrapper.instance().handleDisplayDrawer();
+		expect(wrapper.state('displayDrawer')).toBe(true);
 	});
-  
+
 	it('verify that after calling handleHideDrawer, the state displayDrawer is updated to be false', () => {
-	  wrapper.instance().handleHideDrawer();
-	  expect(wrapper.state('displayDrawer')).toBe(false);
+		wrapper.instance().handleHideDrawer();
+		expect(wrapper.state('displayDrawer')).toBe(false);
 	});
-  
+
 	it(`Tests that the logIn function updates user's state correctly`, () => {
-		  wrapper = mount(
-			  <AppContext.Provider value={{ user, logOut }}>
-				  <App />
-			  </AppContext.Provider>
-		  );
-  
-		  const myUser = {
-			  email: 'testy@gmail.com',
-			  password: 'testy',
-			  isLoggedIn: true,
-		  }
-  
-		  expect(wrapper.state().user).toEqual(user);
-		  const instance = wrapper.instance();
-		  instance.logIn(myUser.email, myUser.password);
-		  expect(wrapper.state().user).toEqual(myUser);
-		  wrapper.unmount();
-	  })
-  
-	  it(`Tests that the logOut function updates user's state correctly`, () => {
-		  wrapper = mount(
-			  <AppContext.Provider value={{ user, logOut }}>
-				  <App />
-			  </AppContext.Provider>
-		  );
-  
-		  const myUser = {
-			  email: 'testy@gmail.com',
-			  password: 'testy',
-			  isLoggedIn: true,
-		  }
-  
-		  expect(wrapper.state().user).toEqual(user);
-		  const instance = wrapper.instance();
-		  instance.logOut();
-		  expect(wrapper.state().user).toEqual(user);
-		  wrapper.unmount();
-	  })
-  });
+		wrapper = mount(
+			<AppContext.Provider value={{ user, logOut }}>
+				<App />
+			</AppContext.Provider>
+		);
+
+		const myUser = {
+			email: 'testy@gmail.com',
+			password: 'testy',
+			isLoggedIn: true,
+		}
+
+		expect(wrapper.state().user).toEqual(user);
+		const instance = wrapper.instance();
+		instance.logIn(myUser.email, myUser.password);
+		expect(wrapper.state().user).toEqual(myUser);
+		wrapper.unmount();
+	})
+
+	it(`Tests that the logOut function updates user's state correctly`, () => {
+		wrapper = mount(
+			<AppContext.Provider value={{ user, logOut }}>
+				<App />
+			</AppContext.Provider>
+		);
+
+		const myUser = {
+			email: 'testy@gmail.com',
+			password: 'testy',
+			isLoggedIn: true,
+		}
+
+		expect(wrapper.state().user).toEqual(user);
+		const instance = wrapper.instance();
+		instance.logOut();
+		expect(wrapper.state().user).toEqual(user);
+		wrapper.unmount();
+	})
+
+	it(`verify that markNotificationAsRead works as intended,
+	deletes the notification with the passed id from the listNotifications array`, () => {
+		const context = {
+			user: {
+				...user,
+			},
+			logOut: jest.fn(),
+			listNotifications: [
+				{ id: 1, type: "default", value: "New course available" },
+				{ id: 2, type: "urgent", value: "New resume available" },
+				{ id: 3, html: { __html: jest.fn() }, type: "urgent" }
+			]
+		}
+
+		const wrapper = mount(
+			<AppContext.Provider value={context}>
+				<App />
+			</AppContext.Provider>
+		);
+
+		const instance = wrapper.instance();
+
+		instance.markNotificationAsRead(3);
+
+		expect(wrapper.state().listNotifications).toEqual([
+			{ id: 1, type: "default", value: "New course available" },
+			{ id: 2, type: "urgent", value: "New resume available" }
+		]);
+
+		expect(wrapper.state().listNotifications.length).toBe(2);
+		expect(wrapper.state().listNotifications[3]).toBe(undefined);
+
+		wrapper.unmount();
+	})
+});
 
